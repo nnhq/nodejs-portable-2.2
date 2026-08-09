@@ -28,6 +28,7 @@ type ConfStruct struct {
 	Shell         string   `json:"shell"`
 	WorkPath      string   `json:"workPath"`
 	CustomPaths   []string `json:"customPaths"`
+	InitCommands  []string `json:"initCommands"`
 }
 
 func init() {
@@ -77,6 +78,11 @@ func init() {
 		util.QuitFatal(err)
 	}
 
+	// Ensure default value for fields not present in an existing config file
+	if Conf.InitCommands == nil {
+		Conf.InitCommands = []string{}
+	}
+
 	// Write config
 	cfgJSON, _ := json.MarshalIndent(Conf, "", "  ")
 	if err != nil {
@@ -119,10 +125,13 @@ SET npmGlobalConfigFilePath=%npmPath%\npmrc
 SET PATH=%nodejsPath%;%PATH%
 cd "%nodejsWork%"
 "%nodejsPath%\nodevars.bat"
-"%nodejsPath%\npm.cmd" config set globalconfig "%npmGlobalConfigFilePath%" --global`
+"%nodejsPath%\npm.cmd" config set globalconfig "%npmGlobalConfigFilePath%" --global
+
+@INIT_COMMANDS@`
 
 	launchScript := strings.Replace(launchScriptTpl, "@WORK_PATH@", workPath, -1)
 	launchScript = strings.Replace(launchScript, "@NODEJS_PATH@", nodePath, -1)
+	launchScript = strings.Replace(launchScript, "@INIT_COMMANDS@", strings.Join(Conf.InitCommands, "\r\n"), -1)
 
 	return launchScript
 }
