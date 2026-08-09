@@ -50,6 +50,18 @@ Run `nodejs-portable.exe`, then choose task:
 * `customPaths` : Array of custom paths that will be placed in the `PATH` environment variable (paths can be relative to `nodejs-portable.exe`).
 * `immediateMode`: Set this to `true` if you want to use node shell immediately.
 * `shell`: Shell to be used. Can be `cmd` (default) or `powershell`.
+* `initCommands` : Array of commands executed **in order** when the shell starts, right after the Node.js environment is set up. Each item is a single line of `cmd`/batch syntax (the commands are appended to the `launch.bat` script, whatever the `shell` value). Typical use cases:
+
+```json
+"initCommands": [
+  "set MY_ENV_VAR=hello",
+  "set PATH=%CD%\\tools;%PATH%",
+  "call .venv\\Scripts\\activate.bat",
+  "powershell -NoProfile -ExecutionPolicy Bypass -File .\\setup.ps1"
+]
+```
+
+> Commands are always interpreted by `cmd` (even when `shell` is `powershell`, the launch script is still a `.bat`). To run a PowerShell script, prefix it with `powershell -NoProfile -ExecutionPolicy Bypass -File ...`. Wrap paths containing spaces in double quotes.
 
 > If an exception happened, take a look into `nodejs-portable.log` for further information.
 

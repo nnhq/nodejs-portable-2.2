@@ -129,6 +129,9 @@ func appConf() error {
     "C:/Program Files (x86)/Git/cmd",
     "D:/another_path",
     "../a_relative_path"
+  ],
+  "initCommands": [
+    "set MY_ENV_VAR=example"
   ]
 }`))
 

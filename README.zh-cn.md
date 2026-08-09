@@ -51,7 +51,19 @@ Thanks to everyone for their valuable feedback and contributions.
 * `workPath` : 环境的工作目录 (可以是相对于 `nodejs-portable.exe` 的相对路径)。
 * `customPaths` : 一组用于放入 `PATH` 环境变量 的路径 (可以是相对于 `nodejs-portable.exe` 的相对路径)。
 * `immediateMode`: 立即模式, 将其设置为 `true` 来直接打开运行时环境。
-* `shell`: Shell to be used. Can be `cmd` (default) or `powershell`.
+* `shell`: 使用的 Shell, 可以是 `cmd` (默认) 或 `powershell`。
+* `initCommands` : 打开 Shell 时**按顺序**自动执行的命令数组, 在 Node.js 环境配置完成后运行。每一项是 `cmd`/批处理语法的一行 (命令会被追加到 `launch.bat` 中, 无论 `shell` 是什么值)。典型用法:
+
+```json
+"initCommands": [
+  "set MY_ENV_VAR=hello",
+  "set PATH=%CD%\\tools;%PATH%",
+  "call .venv\\Scripts\\activate.bat",
+  "powershell -NoProfile -ExecutionPolicy Bypass -File .\\setup.ps1"
+]
+```
+
+> 命令始终由 `cmd` 解释 (即使 `shell` 是 `powershell`, 启动脚本仍然是 `.bat`)。要运行 PowerShell 脚本, 请在前面加上 `powershell -NoProfile -ExecutionPolicy Bypass -File ...`。含空格的路径请用双引号包裹。
 
 > 如果出现了异常, 请检查或提供 `nodejs-portable.log` 来获取更多信息.
 
