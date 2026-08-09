@@ -124,8 +124,8 @@ SET npmGlobalConfigFilePath=%npmPath%\npmrc
 
 SET PATH=%nodejsPath%;%PATH%
 cd "%nodejsWork%"
-"%nodejsPath%\nodevars.bat"
-"%nodejsPath%\npm.cmd" config set globalconfig "%npmGlobalConfigFilePath%" --global
+call "%nodejsPath%\nodevars.bat"
+call "%nodejsPath%\npm.cmd" config set globalconfig "%npmGlobalConfigFilePath%" --global
 
 @INIT_COMMANDS@`
 
